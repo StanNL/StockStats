@@ -3,7 +3,6 @@ import App from './App.vue'
 import 'materialize-css';
 import 'materialize-css/dist/css/materialize.css'
 
-window.M = require('materialize-css');
 Vue.config.productionTip = false
 
 new Vue({
