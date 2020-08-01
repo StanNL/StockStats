@@ -1,4 +1,4 @@
-# stockstats
+# Stock Stats
 
 ## Project setup
 ```
