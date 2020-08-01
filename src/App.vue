@@ -5,12 +5,9 @@
 			rel="stylesheet"
 		>
 		<div v-if="!isLoggedIn">
-			<p>
-				<img
-					alt="Vue logo"
-					src="../src/assets/logo.png"
-				>
-			</p>
+			<h1>
+				Welkom bij Stans Stock Stats!
+			</h1>
 			<button
 				class="waves-effect waves-light btn"
 				@click="firebaseGoogleSignIn"
