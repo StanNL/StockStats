@@ -16,7 +16,16 @@
 			</button>
 		</div>
 		<div v-else>
-			Je bent ingelogd! <br>
+			Je bent ingelogd!
+			<br>
+			<br>
+			<button 
+				class="btn waves-effect waves-light"
+				@click="firebase.auth().signOut()">
+				Uitloggen
+			</button>
+			<br>
+			<br>
 			<div v-if="user.uid">
 				E-mailadres: {{ user.email }} <br>
 				UID: {{ user.uid }}
@@ -122,7 +131,7 @@
 					<br>
 					<div class="row">
 						<div
-							class="col s6 m6"
+							class="col s6 m3"
 							v-for="(stock, index) in stocks"
 							:key="index"
 						>
