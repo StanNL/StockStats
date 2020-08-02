@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
-import App from './App.vue';
 import PageHeader from './components/PageHeader.vue'
 import firebaseMixin from './js/firebase.js'
 import LoginPage from './components/LoginPage.vue'
@@ -33,7 +32,7 @@ const routes = [
     component: StockView
   },
   {
-    path: '/changeStocks',
+    path: '/editPortfolio',
     component: EditStocksView
   },
   {
@@ -45,9 +44,12 @@ const routes = [
     component: ProfilePage
   },
   {
-    path: '*',
-    alias: "/404",
+    path: "/404",
     component: NotFoundPage
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 
@@ -61,7 +63,6 @@ const router = new VueRouter({
 new Vue({
   router,
   components: {
-    App,
 		EditStocksView,
 		StockView,
 		PageHeader,

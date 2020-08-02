@@ -34,8 +34,8 @@
 						</a>
 					</li>
 					<li v-if="user && user.uid">
-						<a @click="openLink('../changeStocks')">
-							Aandelen wijzigen
+						<a @click="openLink('../editPortfolio')">
+							Portfolio bewerken
 						</a>
 					</li>
 					<li v-else>
@@ -67,8 +67,8 @@
 				</a>
 			</li>
 			<li v-if="user && user.uid">
-				<a @click="openLink('../changeStocks')">
-					Aandelen wijzigen
+				<a @click="openLink('../editPortfolio')">
+					Portfolio bewerken
 				</a>
 			</li>
 			<li v-else>

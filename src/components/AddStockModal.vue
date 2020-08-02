@@ -125,7 +125,7 @@
 <script>
 const request = require('request');
 import { exchangeList } from '../data/exchangeList.js'
-
+import firebaseMixin from '../js/firebase.js';
 
 export default {
 	name: "AddStockModal",
@@ -134,6 +134,7 @@ export default {
 			exchangeList: exchangeList
 		}
 	},
+	mixins: [firebaseMixin],
 	props: {
 		value: Object
 	},
@@ -258,6 +259,7 @@ export default {
 			this.value.selectedSymbol.purchaseDate = this.value.purchaseDate;
 			this.value.selectedSymbol.purchasePrice = this.value.purchasePrice;
 			this.value.newStock = this.value.selectedSymbol;
+			this.value.newStock.stockID = this.generateStockID();
 
 			this.$emit("close");
 
@@ -284,8 +286,6 @@ export default {
 				}
 			}
 
-			console.log(d);
-
 			let split = d.split("-");
 			if (split.length === 3 && split[0].length < 3 && split[0].length >= 1 && split[1].length < 3 && split[1].length >= 1 && split[2].length === 4) {
 				let date = split[0];
@@ -293,7 +293,7 @@ export default {
 				let year = split[2];
 				let americanDate = month + "-" + date + "-" + year;
 				d = new Date(americanDate);
-				console.log(d);
+
 				if (d == "Invalid Date") {
 					return {
 						error: "Ongeldige datum! Noteer als dd-mm-yyyy"
@@ -318,6 +318,25 @@ export default {
 			return {
 				date: d
 			}
+		},
+		generateStockID: function(){
+			let notFound = true;
+			let str = this.randomString();
+			while(notFound){
+				let unsuitable = false;
+				for (let i = 0; i < this.stocks.length; i++) {
+					if(this.stocks[i].stockID === str){
+						unsuitable = true;
+					}
+				}
+				if(!unsuitable) notFound = false;
+				else str = this.randomString();
+			}
+
+			return str;
+		},
+		randomString: function() {
+			return require("uuid").v4().substr(0, 16);
 		},
 		prependZero: function (n) {
 			return (n < 10) ? ("0" + n) : n;

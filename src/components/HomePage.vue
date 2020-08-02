@@ -46,7 +46,7 @@
 						</table>
 					</div>
 					<div class="card-action">
-						<router-link :to="'/stockInfo/' + index">Meer info</router-link>
+						<router-link :to="'/stockInfo/' + stock.stockID">Meer info</router-link>
 					</div>
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 				<br>
 				<router-link
 					class="waves-effect waves-light btn"
-					to="/changeStocks"
+					to="/editPortfolio"
 				>
 					<i class="material-icons left">add</i>
 					Aandelen toevoegen
@@ -76,9 +76,6 @@ export default {
 			user: {},
 			stocks: []
 		}
-	},
-	mounted: function(){
-		console.log("hurray?");
 	}
 }
 </script>

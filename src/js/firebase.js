@@ -31,14 +31,14 @@ export default {
 			if (user != null) {
 				self.isLoggedIn = true;
 				self.initUserData();
-				if(self.$route.path === '/login'){
-					self.$router.push("/");
+				if(self.$route.path.startsWith('/login')){
+					self.$router.push(self.$route.query.redirect || "/");
 				}
 			} else {
 				self.user = {};
 				self.isLoggedIn = false;
-				if(self.$route.path != '/login'){
-					self.$router.push("/login");
+				if(self.$route.path != '/login' && self.$route.path != '/404'){
+					self.$router.push("/login?redirect=" + self.$route.path);
 				}
 			}
 		});
