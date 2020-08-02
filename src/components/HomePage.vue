@@ -1,8 +1,6 @@
 <template>
 	<div>	
 		<h1>Homepagina</h1>
-		<br>
-		<br>
 		<div class="row">
 			<div
 				class="col s12 m6 l3"

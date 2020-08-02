@@ -1,97 +1,91 @@
 <template>
 	<div>
-		<table id="editStockTable" class='striped highlight'>
-			<thead>
-				<tr>
-					<td>
-						Symbool
-					</td>
-					<td>
-						Aankoopdatum
-					</td>
-					<td>
-						Aankoopprijs
-					</td>
-					<td>
-						Verkoopdatum (optioneel)
-					</td>
-					<td>
-						Verkoopprijs (optioneel)
-					</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr
-					v-for="(stock, index) in stocks"
-					:key="index"
-				>
-					<td>
-						{{ stock.description }}
-					</td>
-					<td>
-						{{ stock.purchaseDate }}
-					</td>
-					<td>
-						{{ stock.purchasePrice.toFixed(2) }} {{stock.currency}}
-					</td>
-					<td>
-						<input
-							v-if="stock.saleDate == null"
-							v-model="stock.newSaleDate"
+		<div class='row'>
+			<div class="col s12" style='overflow-x: scroll;'>
+				<table id="editStockTable" style="table-layout: fixed;" class='striped highlight'>
+					<thead>
+						<tr>
+							<td>
+								Symbool
+							</td>
+							<td>
+								Aankoopdatum
+							</td>
+							<td>
+								Aankoopprijs
+							</td>
+							<td>
+								Verkoopdatum (optioneel)
+							</td>
+							<td>
+								Verkoopprijs (optioneel)
+							</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							v-for="(stock, index) in stocks"
+							:key="index"
 						>
-						<span v-else>
-							{{ stock.saleDate }}
-						</span>
-					</td>
-					<td>
-						<input
-							v-if="stock.salePrice == null"
-							v-model="stock.newSalePrice"
-						>
-						<span v-else>
-							{{ (+stock.salePrice).toFixed(2) }} {{stock.currency}}
-						</span>
-					</td>
-					<td>
-						<button
-							class="waves-effect waves-light btn"
-							@click="deleteStock(index)"
-						>
-							<i class="material-icons">delete</i>
-						</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<p class="errorMessage">{{ editStocksError }}</p>
-		<br>
-		<button
-			class="waves-effect waves-light btn"
-			style="margin-top: 18px;"
-			@click="showAddStockModal()"
-		>
-			<i class="material-icons left">add</i>
-			Nieuw aandeel toevoegen
-		</button>
-		<br>
-		<button
-			class="waves-effect waves-light btn"
-			style="margin-top: 18px;"
-			@click="saveStocks()"
-		>
-			<i class="material-icons left">save</i>
-			Aandelen opslaan
-		</button>
-		<br>
-		<router-link
-			class="waves-effect waves-light btn"
-			style="margin-top: 18px;"
-			to='/'
-		>
-			<i class="material-icons left">home</i>
-			Terug naar home
-		</router-link>
-
+							<td>
+								{{ stock.description }}
+							</td>
+							<td>
+								{{ stock.purchaseDate }}
+							</td>
+							<td>
+								{{ stock.purchasePrice.toFixed(2) }} {{stock.currency}}
+							</td>
+							<td>
+								<input
+									v-if="stock.saleDate == null"
+									v-model="stock.newSaleDate"
+								>
+								<span v-else>
+									{{ stock.saleDate }}
+								</span>
+							</td>
+							<td>
+								<input
+									v-if="stock.salePrice == null"
+									v-model="stock.newSalePrice"
+								>
+								<span v-else>
+									{{ (+stock.salePrice).toFixed(2) }} {{stock.currency}}
+								</span>
+							</td>
+							<td>
+								<button
+									class="waves-effect waves-light btn"
+									@click="deleteStock(index)"
+								>
+									<i class="material-icons">delete</i>
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="errorMessage">{{ editStocksError }}</p>
+			<br>
+			<button
+				class="waves-effect waves-light btn"
+				style="margin-top: 18px;"
+				@click="showAddStockModal()"
+			>
+				<i class="material-icons left">add</i>
+				Nieuw aandeel toevoegen
+			</button>
+			<br>
+			<button
+				class="waves-effect waves-light btn"
+				style="margin-top: 18px;"
+				@click="saveStocks()"
+			>
+				<i class="material-icons left">save</i>
+				Aandelen opslaan
+			</button>
+		</div>
 		<add-stock-modal
 			@close="aandeelToevoegen"
 			v-model="addStock"/>
@@ -151,6 +145,7 @@ export default {
 			}
 		},
 		saveStocks: function () {
+			this.editStocksError = '';
 			for (let i = 0; i < this.stocks.length; i++) {
 				if (this.stocks[i].newSalePrice) {
 					if (isNaN(this.stocks[i].newSalePrice)) {
@@ -190,8 +185,9 @@ export default {
 
 <style lang="scss">
 #editStockTable {
-	max-width: 800px;
+	max-width: 1000px;
 	width: 80% !important;
+	min-width: 675px;
 	left: 10%;
 	position: relative;
 	@media only screen and (min-width: 1000px) {
