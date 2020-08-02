@@ -9,7 +9,7 @@
 				:key="index"
 				class="collection-item"
 			>
-				<b>{{ stock.symbol }}:</b> {{ (+((stock.weekStart||{})['1. open']||0)).toFixed(2) }} {{ stock.currency }}
+				<b>{{ stock.symbol }}:</b> {{ (+((stock.weekStart||{})['1. open']||0)).toFixed(2) }} {{ stock.currency }} op {{ (stock.weekStart||{}).date }}
 			</li>
 		</ul>
 	</div>
@@ -28,6 +28,10 @@ export default {
 	mixins: [firebaseMixin],
 	watch: {
 		stocks: function () {
+			let weekStart = new Date();
+			weekStart.setDate(new Date().getDate() - this.mod((new Date().getDay() - 1), 7));
+			weekStart.setHours(0);
+			weekStart.setMinutes(0);
 			let doneSymbols = [];
 			let self = this;
 			for (let i = 0; i < this.stocks.length; i++) {
@@ -55,17 +59,15 @@ export default {
 					let timeQuotes = quotes[quoteKey];
 
 					let dates = Object.keys(timeQuotes);
-					let d = new Date().setDate(new Date().getDate() - ((new Date().getDay() - 1) % 7));
 					let dddRecord = Infinity;
 					let closestDate = null;
 					for (let i = 0; i < dates.length; i++) {
-						const date = dates[i].split("-");
-						let dString = date[0] + "-" + date[2] + "-" + date[1];
-						let dd = new Date(dString);
-						let ddd = dd - d;
-						if (ddd < dddRecord) {
-							dddRecord = ddd;
-							closestDate = date.join("-");
+						const date = dates[i];
+						let dd = new Date(date);
+						let ddd = dd - weekStart;
+						if (Math.abs(ddd) < dddRecord) {
+							dddRecord = Math.abs(ddd);
+							closestDate = date;
 						}
 					}
 
@@ -78,11 +80,18 @@ export default {
 						if (self.stocks[i].symbol === symbol) {
 							self.stocks[i].quotes = quotes[quoteKey];
 							self.stocks[i].weekStart = quotes[quoteKey][closestDate];
+							self.stocks[i].weekStart.date = closestDate;
+							self.$forceUpdate();
 							break;
 						}
 					}
 				})
 			}
+		},
+	},
+	methods: {
+		mod: function (a, b) { //a mod b taking into account a < 0
+			return (a < 0) ? ((b + a) % b) : (a % b);
 		}
 	}
 }
