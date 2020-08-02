@@ -34,6 +34,11 @@
 						</a>
 					</li>
 					<li v-if="user && user.uid">
+						<a @click="openLink('../portfolio')">
+							Portfolio weergeven
+						</a>
+					</li>
+					<li v-if="user && user.uid">
 						<a @click="openLink('../editPortfolio')">
 							Portfolio bewerken
 						</a>
@@ -64,6 +69,11 @@
 			<li v-if="user && user.uid">
 				<a @click="openLink('../profile')">
 					Mijn profiel ({{ user.displayName }})
+				</a>
+			</li>
+			<li v-if="user && user.uid">
+				<a @click="openLink('../portfolio')">
+					Portfolio weergeven
 				</a>
 			</li>
 			<li v-if="user && user.uid">

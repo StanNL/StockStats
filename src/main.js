@@ -5,6 +5,7 @@ import firebaseMixin from './js/firebase.js'
 import LoginPage from './components/LoginPage.vue'
 import LogoutPage from './components/LogoutPage.vue'
 import ProfilePage from './components/ProfilePage.vue'
+import PortfolioView from './components/PortfolioView.vue'
 import NotFoundPage from './components/NotFoundPage.vue'
 import HomePage from './components/HomePage.vue'
 import EditStocksView from './components/EditStocksView.vue'
@@ -42,6 +43,10 @@ const routes = [
   {
     path: '/profile',
     component: ProfilePage
+  },
+  {
+    path: '/portfolio',
+    component: PortfolioView
   },
   {
     path: "/404",

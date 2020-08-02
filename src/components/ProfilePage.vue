@@ -1,9 +1,12 @@
 <template>
-	<div>
+	<div id='profilePage'>
 		<h1>Mijn profiel</h1>
-		Hier komt ooit een profiel-pagina.
-		<br>
-		{{ JSON.stringify(user) }}
+		<h3>Gebruiksgegevens</h3>
+		<b>Naam: </b> {{ user.displayName }} <br>
+		<b>E-mailadres: </b> {{ user.email }} <br>
+		<b>Gebruikers-ID: </b> {{ user.uid }} <br>
+		<h3>Instellingen</h3>
+		Nog in ontwikkeling.
 	</div>
 </template>
 
@@ -22,3 +25,11 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+#profilePage {
+	text-align: left;
+	width: 100%;
+	padding: 0 3rem;
+}
+</style>

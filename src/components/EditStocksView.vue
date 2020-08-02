@@ -9,16 +9,16 @@
 								Symbool
 							</td>
 							<td>
-								Aankoopdatum
-							</td>
-							<td>
 								Aankoopprijs
 							</td>
 							<td>
-								Verkoopdatum (optioneel)
+								Aankoopdatum
 							</td>
 							<td>
 								Verkoopprijs (optioneel)
+							</td>
+							<td>
+								Verkoopdatum (optioneel)
 							</td>
 						</tr>
 					</thead>
@@ -31,19 +31,10 @@
 								{{ stock.description }}
 							</td>
 							<td>
-								{{ stock.purchaseDate }}
-							</td>
-							<td>
 								{{ stock.purchasePrice.toFixed(2) }} {{stock.currency}}
 							</td>
 							<td>
-								<input
-									v-if="stock.saleDate == null"
-									v-model="stock.newSaleDate"
-								>
-								<span v-else>
-									{{ stock.saleDate }}
-								</span>
+								{{ stock.purchaseDate }}
 							</td>
 							<td>
 								<input
@@ -52,6 +43,15 @@
 								>
 								<span v-else>
 									{{ (+stock.salePrice).toFixed(2) }} {{stock.currency}}
+								</span>
+							</td>
+							<td>
+								<input
+									v-if="stock.saleDate == null"
+									v-model="stock.newSaleDate"
+								>
+								<span v-else>
+									{{ stock.saleDate }}
 								</span>
 							</td>
 							<td>
@@ -124,6 +124,50 @@ export default {
 				selectedExchange: {},
 				symbolOptions: [],
 				forceStep1: false
+			}
+		},
+		valiDate: function (d) {
+			if (d.split("/").length === 3) {
+				if (d.split("-").length === 1) {
+					d = d.replace(/\//g, "-")
+				} else {
+					return {
+						error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+					}
+				}
+			}
+
+			let split = d.split("-");
+			if (split.length === 3 && split[0].length < 3 && split[0].length >= 1 && split[1].length < 3 && split[1].length >= 1 && split[2].length === 4) {
+				let date = split[0];
+				let month = split[1];
+				let year = split[2];
+				let americanDate = month + "-" + date + "-" + year;
+				d = new Date(americanDate);
+
+				if (d == "Invalid Date") {
+					return {
+						error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+					}
+				}else {
+					let testDate = new Date();
+					testDate.setDate(date);
+					testDate.setMonth(month-1);
+					testDate.setFullYear(year);
+					if(testDate.getDate() != date || testDate.getMonth() != (month-1) || testDate.getFullYear() != year){
+						return {
+							error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+						}
+					}
+				}
+			} else {
+				return {
+					error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+				}
+			}
+
+			return {
+				date: d
 			}
 		},
 		showAddStockModal: function () {
