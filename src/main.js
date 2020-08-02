@@ -61,7 +61,7 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history',
-  base: (location.hostname === 'github.io' ? '/StockStats':'')
+  base: (location.hostname === 'stannl.github.io' ? '/StockStats':'')
 });
 
 
