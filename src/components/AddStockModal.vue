@@ -8,104 +8,116 @@
 			id="addStockModal"
 		>
 			<h1>Aandeel toevoegen</h1>
-			<div v-if="value.selectedSymbol && (value.selectedSymbol.symbol == null || value.forceStep1)">
-				<div class="row">
-					<div class="col s6">
-						<div class="input-field">
-							<label for="exchange">Exchange</label>
-							<input
-								autocomplete="off"
-								type="text"
-								id="exchange"
-								@keyup="addStockExchangeInput"
-								v-model="value.exchange"
-							>
+			<div class="content">
+				<div v-if="value.selectedSymbol && (value.selectedSymbol.symbol == null || value.forceStep1)">
+					<div class="row">
+						<div class="col s6">
+							<div class="input-field">
+								<label for="exchange">Exchange</label>
+								<input
+									autocomplete="off"
+									type="text"
+									id="exchange"
+									@keyup="addStockExchangeInput"
+									v-model="value.exchange"
+								>
+							</div>
+							<ul>
+								<li
+									style="text-align: left;"
+									v-for="(suggestion, index) in value.exchangeSuggestions"
+									:key="index"
+								>
+									<a @click="chooseExchange(suggestion)">
+										{{ suggestion.preMatch }}<b>{{ suggestion.match }}</b>{{ suggestion.postMatch }}
+									</a>
+								</li>
+							</ul>
 						</div>
-						<ul>
-							<li
-								style="text-align: left;"
-								v-for="(suggestion, index) in value.exchangeSuggestions"
-								:key="index"
-							>
-								<a @click="chooseExchange(suggestion)">
-									{{ suggestion.preMatch }}<b>{{ suggestion.match }}</b>{{ suggestion.postMatch }}
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="col s6">
-						<div class="input-field">
-							<label for="symbolChoice">Symbol</label>
-							<input
-								autocomplete="off"
-								type="text"
-								id="symbolChoice"
-								@keyup="addStockSymbolInput"
-								:disabled="value.selectedExchange.name == null"
-								v-model="value.symbol"
-							>
-						</div>
-						<ul>
-							<li
-								style="text-align: left;"
-								v-for="(suggestion, index) in value.symbolSuggestions"
-								:key="index"
-							>
-								<a @click="chooseSymbol(suggestion)">
-									{{ suggestion.preMatch }}<b>{{ suggestion.match }}</b>{{ suggestion.postMatch }}
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div v-else>
-				<div class='row'>
-					<p>
-						Gekozen aandeel: {{ value.selectedSymbol.description }}
-					</p>
-					<div class="col s6">
-						<div class="input-field">
-							<label for="purchaseDate">Aankoopdatum</label>
-							<input
-								type="text"
-								autocomplete="off"
-								id="purchaseDate"
-								v-model="value.purchaseDate"
-							>
-						</div>
-					</div>
-					<div class="col s6">
-						<div class="input-field">
-							<label for="purchasePrice">Aankoopprijs ({{ value.selectedSymbol.currency }})</label>
-							<input
-								type="text"
-								autocomplete="off"
-								id="purchasePrice"
-								@keyup="priceInput"
-								v-model="value.purchasePrice"
-							>
+						<div class="col s6">
+							<div class="input-field">
+								<label for="symbolChoice">Symbol</label>
+								<input
+									autocomplete="off"
+									type="text"
+									id="symbolChoice"
+									@keyup="addStockSymbolInput"
+									:disabled="value.selectedExchange.name == null"
+									v-model="value.symbol"
+								>
+							</div>
+							<ul>
+								<li
+									style="text-align: left;"
+									v-for="(suggestion, index) in value.symbolSuggestions"
+									:key="index"
+								>
+									<a @click="chooseSymbol(suggestion)">
+										{{ suggestion.preMatch }}<b>{{ suggestion.match }}</b>{{ suggestion.postMatch }}
+									</a>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>
-				<p class="errorMessage">{{ value.error }}</p>
-				<button
-					class="waves-effect waves-light btn"
-					@click="backAddStock"
-				>
-					<i class="material-icons left">arrow_back</i>
-					Terug
-				</button>
-				<br>
-				<br>
-				<button
-					class="waves-effect waves-light btn"
-					@click="saveAddStock"
-				>
-					<i class="material-icons left">save</i>
-					Opslaan
-				</button>
+				<div v-else>
+					<div class='row'>
+						<p>
+							Gekozen aandeel: {{ value.selectedSymbol.description }}
+						</p>
+						<div class="col s6">
+							<div class="input-field">
+								<label for="purchaseDate">Aankoopdatum</label>
+								<input
+									type="text"
+									autocomplete="off"
+									@input="value.error = null"
+									id="purchaseDate"
+									v-model="value.purchaseDate"
+								>
+							</div>
+						</div>
+						<div class="col s6">
+							<div class="input-field">
+								<label for="purchasePrice">Aankoopprijs ({{ value.selectedSymbol.currency }})</label>
+								<input
+									type="text"
+									autocomplete="off"
+									id="purchasePrice"
+									@input="value.error = null"
+									@keyup="priceInput"
+									v-model="value.purchasePrice"
+								>
+							</div>
+						</div>
+					</div>
+					<p class="errorMessage">{{ value.error }}</p>
+					<button
+						class="waves-effect waves-light btn"
+						@click="backAddStock"
+					>
+						<i class="material-icons left">arrow_back</i>
+						Terug
+					</button>
+					<br>
+					<br>
+					<button
+						class="waves-effect waves-light btn"
+						@click="saveAddStock"
+					>
+						<i class="material-icons left">save</i>
+						Opslaan
+					</button>
+				</div>
 			</div>
+			<button
+				style='margin-top: 16px;'
+				class="waves-effect waves-light btn"
+				@click="closeSelf()"
+			>
+				<i class="material-icons left">close</i>
+				Sluiten
+			</button>
 		</div>
 	</div>
 </template>
@@ -218,7 +230,7 @@ export default {
 				return;
 			}
 			if (!this.value.purchasePrice) {
-				this.value.error = "Voer eerst de prisj in waarvoor je dit aandeel hebt gekocht.";
+				this.value.error = "Voer eerst de prijs in waarvoor je dit aandeel hebt gekocht.";
 				this.$forceUpdate();
 				return;
 			}
@@ -226,6 +238,7 @@ export default {
 			if (d.error) {
 				this.value.error = d.error;
 				this.$forceUpdate();
+				return;
 			}
 			d = d.date;
 
@@ -248,6 +261,9 @@ export default {
 
 			this.$emit("close");
 
+			this.closeSelf();
+		},
+		closeSelf: function(){
 			this.value.showModal3 = false;
 			let self = this;
 			setTimeout(function () {
@@ -263,31 +279,44 @@ export default {
 					d = d.replace(/\//g, "-")
 				} else {
 					return {
-						d: null,
 						error: "Ongeldige datum! Noteer als dd-mm-yyyy"
 					}
 				}
 			}
 
+			console.log(d);
+
 			let split = d.split("-");
 			if (split.length === 3 && split[0].length < 3 && split[0].length >= 1 && split[1].length < 3 && split[1].length >= 1 && split[2].length === 4) {
-				let americanDate = split[1] + "-" + split[0] + "-" + split[2];
+				let date = split[0];
+				let month = split[1];
+				let year = split[2];
+				let americanDate = month + "-" + date + "-" + year;
 				d = new Date(americanDate);
+				console.log(d);
 				if (d == "Invalid Date") {
 					return {
-						d: null,
 						error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+					}
+				}else {
+					let testDate = new Date();
+					testDate.setDate(date);
+					testDate.setMonth(month-1);
+					testDate.setFullYear(year);
+					if(testDate.getDate() != date || testDate.getMonth() != (month-1) || testDate.getFullYear() != year){
+						return {
+							error: "Ongeldige datum! Noteer als dd-mm-yyyy"
+						}
 					}
 				}
 			} else {
 				return {
-					date: null,
 					error: "Ongeldige datum! Noteer als dd-mm-yyyy"
 				}
 			}
+
 			return {
-				date: d,
-				error: null
+				date: d
 			}
 		},
 		prependZero: function (n) {
@@ -305,3 +334,76 @@ export default {
 	}
 }
 </script>
+
+<style lang="scss">
+
+#overlay {
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	transition-duration: 750ms;
+	display: none;
+	z-index: 40;
+
+	&.shown1 {
+		display: block;
+	}
+
+	@supports (backdrop-filter: blur(8px)) {
+		backdrop-filter: blur(0px);
+		&.shown2 {
+			background-color: rgba(0, 0, 0, 0.2);
+			backdrop-filter: blur(8px);
+		}
+	}
+	@supports not (backdrop-filter: blur(8px)) {
+		background-color: rgba(0, 0, 0, 0);
+		&.shown2 {
+			background-color: rgba(0, 0, 0, 0.45);
+		}
+	}
+}
+
+#addStockModal {
+	position: absolute;
+	width: 85%;
+	left: 7.5%;
+	@media only screen and (min-width: 941px){
+		left: calc(50% - 400px);
+	}
+	max-width: 800px;
+	background: white;
+	height: 500px;
+	top: 80px;
+	border-radius: 14px;
+	box-shadow: 20px 20px 80px rgba(0, 0, 0, 0.4);
+	padding: 4px 24px;
+	opacity: 0;
+	transition-duration: 500ms;
+
+	.content {
+		overflow-y: auto;
+		height: 280px;
+	}
+	a {
+		cursor: pointer;
+	}
+
+	&.shown {
+		opacity: 1;
+	}
+
+	h1 {
+		border-bottom: solid 4px #ddd;
+		padding-bottom: 12px;
+	}
+}
+
+.errorMessage {
+	color: red;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+</style>

@@ -22,7 +22,7 @@
 			</thead>
 			<tbody>
 				<tr
-					v-for="(stock, index) in value"
+					v-for="(stock, index) in stocks"
 					:key="index"
 				>
 					<td>
@@ -83,14 +83,14 @@
 			Aandelen opslaan
 		</button>
 		<br>
-		<button
+		<router-link
 			class="waves-effect waves-light btn"
 			style="margin-top: 18px;"
-			@click="$emit('home')"
+			to='/'
 		>
 			<i class="material-icons left">home</i>
 			Terug naar home
-		</button>
+		</router-link>
 
 		<add-stock-modal
 			@close="aandeelToevoegen"
@@ -101,19 +101,18 @@
 
 <script>
 import AddStockModal from './AddStockModal.vue';
+import firebaseMixin from '../js/firebase.js';
 
 export default {
 	name: "EditStocksView",
 	components: {
 		AddStockModal
 	},
-	props: {
-		value: Array,
-		firebase: Object
-	},
+	mixins: [firebaseMixin],
 	data: function(){
 		return {
 			addStock: this.emptyAddStock(),
+			stocks: [],
 			editStocksError: ""
 		}
 	},
@@ -147,46 +146,56 @@ export default {
 		},
 		deleteStock: function (index) {
 			if (confirm("Weet je zeker dat je dit aandeel wilt verwijderen?")) {
-				this.value.splice(index, 1);
+				this.stocks.splice(index, 1);
 				this.saveStocks();
 			}
 		},
 		saveStocks: function () {
-			for (let i = 0; i < this.value.length; i++) {
-				if (this.value[i].newSalePrice) {
-					if (isNaN(this.value[i].newSalePrice)) {
+			for (let i = 0; i < this.stocks.length; i++) {
+				if (this.stocks[i].newSalePrice) {
+					if (isNaN(this.stocks[i].newSalePrice)) {
 						this.editStocksError = "Ongeldige verkoopprijs in je " + (i + 1) + "de rij!";
 					} else {
 						this.editStocksError = "";
-						this.value[i].salePrice = +this.value[i].newSalePrice;
-						delete this.value[i].newSalePrice;
+						this.stocks[i].salePrice = +this.stocks[i].newSalePrice;
+						delete this.stocks[i].newSalePrice;
 					}
 				}
-				if (this.value[i].newSaleDate) {
-					let validation = this.valiDate(this.value[i].newSaleDate);
+				if (this.stocks[i].newSaleDate) {
+					let validation = this.valiDate(this.stocks[i].newSaleDate);
 					if (validation.error) {
 						this.editStocksError = validation.error;
 						return;
 					} else {
 						this.editStocksError = "";
-						this.value[i].saleDate = this.value[i].newSaleDate;
-						delete this.value[i].newSaleDate;
+						this.stocks[i].saleDate = this.stocks[i].newSaleDate;
+						delete this.stocks[i].newSaleDate;
 					}
 				}
 			}
 
 			this.$forceUpdate();
 
-			this.$emit("stocksUpdated", {
-				data: {
-					stocks: this.value
-				}
+			this.uploadUserData({
+				stocks: this.stocks
 			});
 		},
 		aandeelToevoegen: function(){
-			this.value.push(this.addStock.newStock);
+			this.stocks.push(this.addStock.newStock);
 			this.saveStocks();
 		}
 	}
 }
 </script>
+
+<style lang="scss">
+#editStockTable {
+	max-width: 800px;
+	width: 80% !important;
+	left: 10%;
+	position: relative;
+	@media only screen and (min-width: 1000px) {
+		left: calc(50% - 400px);
+	}
+}
+</style>

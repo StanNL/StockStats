@@ -9,48 +9,58 @@
 				{{ stockData.pctChange }}%
 			</span>
 		</h4>
-		<div v-else>
-			Laden...
-		</div>
+		<loading-spinner v-else/>
+		<br>
+		<router-link
+			class="waves-effect waves-light btn"
+			to="/"
+		>
+			<i class="material-icons left">arrow_back</i>
+			Terug
+		</router-link>
 	</div>
 </template>
 <script>
+import firebaseMixin from '../js/firebase.js';
+import LoadingSpinner from './LoadingSpinner.vue'
 const request = require('request');
 
 export default {
 	name: "StockView",
+	components: {
+		LoadingSpinner
+	},
+	mixins: [firebaseMixin],
 	data: function(){
 		return {
+			user: {},
+			stocks: [],
+			stock: {},
 			stockData: {}
 		}
 	},
-	props: {
-		stock: Object
-	},
-	mounted: function(){
-		let self = this;
-		this.stockData.loaded = false;
-		request('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=K2RAV5JYMOOVLZMB&symbol=' + this.stock.symbol + '&outputsize=compact&datatype=json', {json: true}, function(a, b, data){
-			a;
-			b;
-			data = data[Object.keys(data)[0]]
-			let keys = Object.keys(data);
-			console.log(keys);
-			for (let i = 0; i < keys.length; i++) {
-				console.log(keys[i]);
-				if(keys[i].split("price").length > 1){
-					self.stockData.price = +data[keys[i]];
-					console.log("prijsgevonden?");
+	watch: {
+		stocks: function(){
+			this.stock = this.stocks[this.$route.params.stockID];
+			let self = this;
+			this.stockData.loaded = false;
+			request('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=K2RAV5JYMOOVLZMB&symbol=' + this.stock.symbol + '&outputsize=compact&datatype=json', {json: true}, function(a, b, data){
+				a;
+				b;
+				data = data[Object.keys(data)[0]]
+				let keys = Object.keys(data);
+				for (let i = 0; i < keys.length; i++) {
+					if(keys[i].split("price").length > 1){
+						self.stockData.price = +data[keys[i]];
+					}
+					if(keys[i].split("change percent").length > 1){
+						self.stockData.pctChange = +(data[keys[i]].split("%")[0]);
+					}
 				}
-				if(keys[i].split("change percent").length > 1){
-					self.stockData.pctChange = +(data[keys[i]].split("%")[0]);
-					console.log("pctgevonden?");
-				}
-			}
-			console.log("dus dat wel?");
-			self.stockData.loaded = true;
-			self.$forceUpdate();
-		});
+				self.stockData.loaded = true;
+				self.$forceUpdate();
+			});
+		}
 	}
 }
 </script>
