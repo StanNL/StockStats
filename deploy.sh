@@ -14,12 +14,9 @@ cd dist
 
 git init
 git add -A
-git commit -m 'deploy'
+after_success:
+	git commit-m "Committed by Travis-CI with build number: $TRAVIS_JOB_ID"
 
-# if you are deploying to https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git master
-
-# if you are deploying to https://<USERNAME>.github.io/<REPO>
 git push -f git@github.com:StanNL/StockStats.git master:gh-pages
 
 cd -
