@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class='row'>
-			<div class="col s12" style='overflow-x: scroll;'>
+			<div class="col s12" style='overflow-x: auto;'>
 				<table id="editStockTable" style="table-layout: fixed;" class='striped highlight'>
 					<thead>
 						<tr>
@@ -192,6 +192,10 @@ export default {
 	position: relative;
 	@media only screen and (min-width: 1000px) {
 		left: calc(50% - 400px);
+	}
+	@media only screen and (max-width: 720px) {
+		left: 0!important;
+		width: 100%!important;
 	}
 }
 </style>

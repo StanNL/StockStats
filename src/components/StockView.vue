@@ -42,6 +42,10 @@ export default {
 	watch: {
 		stocks: function(){
 			this.stock = this.stocks[this.$route.params.stockID];
+			if(!this.stock) {
+				this.$router.push("/404");
+				return;
+			}
 			let self = this;
 			this.stockData.loaded = false;
 			request('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=K2RAV5JYMOOVLZMB&symbol=' + this.stock.symbol + '&outputsize=compact&datatype=json', {json: true}, function(a, b, data){

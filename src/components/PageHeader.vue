@@ -17,32 +17,29 @@
 						menu
 					</i>
 				</a>
-				<ul class="right hide-on-med-and-down">
+				<ul id='navurls' class="right hide-on-med-and-down">
 					<li>
 						<a @click="openLink('/')">
 							Home
 						</a>
 					</li>
 					<li v-if="user && user.uid">
-						<a
-							@click="logOut()"
-							href="#"
-						>
+						<a @click="openLink('../logout')">
 							Uitloggen
 						</a>
 					</li>
 					<li v-if="user && user.uid">
-						<a @click="openLink('profile')">
+						<a @click="openLink('../profile')">
 							Mijn profiel ({{ user.displayName }})
 						</a>
 					</li>
 					<li v-if="user && user.uid">
-						<a @click="openLink('changeStocks')">
+						<a @click="openLink('../changeStocks')">
 							Aandelen wijzigen
 						</a>
 					</li>
 					<li v-else>
-						<a @click="openLink('login')">
+						<a @click="openLink('../login')">
 							Inloggen
 						</a>
 					</li>
@@ -60,25 +57,22 @@
 				</a>
 			</li>
 			<li v-if="user && user.uid">
-				<a
-					@click="logOut()"
-					href="#"
-				>
+				<a @click="openLink('../logout')">
 					Uitloggen
 				</a>
 			</li>
 			<li v-if="user && user.uid">
-				<a @click="openLink('profile')">
+				<a @click="openLink('../profile')">
 					Mijn profiel ({{ user.displayName }})
 				</a>
 			</li>
 			<li v-if="user && user.uid">
-				<a @click="openLink('changeStocks')">
+				<a @click="openLink('../changeStocks')">
 					Aandelen wijzigen
 				</a>
 			</li>
 			<li v-else>
-				<a @click="openLink('login')">
+				<a @click="openLink('../login')">
 					Inloggen
 				</a>
 			</li>
@@ -105,7 +99,7 @@ export default {
 			this.closeSideNav();
 		},
 		openLink: function (link) {
-			if (this.$route.path != link) {
+			if (this.$route.path != link.substr(2)) {
 				this.$router.push(link);
 			}
 			this.closeSideNav();
@@ -121,5 +115,15 @@ export default {
 <style lang="scss">
 .sidenav a, .nav-wrapper a {
 	cursor: pointer;
+}
+.brand-logo {
+    width: 100%;
+	left: 0px;
+	z-index: 1;
+}
+
+#navurls{
+	position: relative;
+	z-index: 2;
 }
 </style>

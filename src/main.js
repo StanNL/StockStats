@@ -4,6 +4,8 @@ import App from './App.vue';
 import PageHeader from './components/PageHeader.vue'
 import firebaseMixin from './js/firebase.js'
 import LoginPage from './components/LoginPage.vue'
+import LogoutPage from './components/LogoutPage.vue'
+import ProfilePage from './components/ProfilePage.vue'
 import NotFoundPage from './components/NotFoundPage.vue'
 import HomePage from './components/HomePage.vue'
 import EditStocksView from './components/EditStocksView.vue'
@@ -35,13 +37,24 @@ const routes = [
     component: EditStocksView
   },
   {
+    path: '/logout',
+    component: LogoutPage
+  },
+  {
+    path: '/profile',
+    component: ProfilePage
+  },
+  {
     path: '*',
+    alias: "/404",
     component: NotFoundPage
   }
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history',
+  base: window.location.pathName
 });
 
 

@@ -58,7 +58,7 @@ export default {
 					console.log("Nog geen user data!");
 				}
 			}).catch(function (error) {
-				console.log("Error getting document:", error);
+				throw error;
 			});
 		},
 		refreshUserData: function () {
@@ -67,7 +67,7 @@ export default {
 		uploadUserData: function (data, callback) {
 			if (!this.user.uid) alert("niet ingelogd, idioot");
 			this.db.collection("users").doc(this.user.uid).set(data, { merge: true }).catch(function (error) {
-				console.log(error);
+				throw error;
 			}).then(callback || (() => { }));
 		},
 	}

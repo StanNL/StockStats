@@ -50,6 +50,17 @@
 					</div>
 				</div>
 			</div>
+			<div v-if="!stocks.length">
+				Nog geen aandelen gevonden!
+				<br>
+				<router-link
+					class="waves-effect waves-light btn"
+					to="/changeStocks"
+				>
+					<i class="material-icons left">add</i>
+					Aandelen toevoegen
+				</router-link>
+			</div>
 		</div>
 	</div>
 </template>
@@ -65,6 +76,9 @@ export default {
 			user: {},
 			stocks: []
 		}
+	},
+	mounted: function(){
+		console.log("hurray?");
 	}
 }
 </script>
